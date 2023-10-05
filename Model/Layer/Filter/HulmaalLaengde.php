@@ -1,7 +1,7 @@
 <?php
 namespace Swissup\AlnStigfabrikken\Model\Layer\Filter;
 
-use Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Slider\AbstractFilter;
+use Swissup\AlnStigfabrikken\Model\Layer\Filter\AbstractFilter;
 use Swissup\Ajaxlayerednavigation\Model\Layer\Filter\ItemFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Layer;
@@ -10,14 +10,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 class HulmaalLaengde extends AbstractFilter
 {
-    /**
-     *
-     * @var array of \Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Price\AggregationRange
-     */
-    private $ranges;
-
-    private $options;
-
     /**
      *
      * @var \Swissup\AlnStigfabrikken\Model\Layer\AttributeValueRangeResolver
@@ -59,41 +51,18 @@ class HulmaalLaengde extends AbstractFilter
             $algorithmFactory,
             $dataProviderFactory,
             $resourceFilterPrice,
+            $rangeFactory,
             $data
         );
 
         $this->rangeResolver = $rangeResolver;
-
-        $range = $rangeFactory->create();
-
-        $range = $this->initRange($range);
-        $this->setRange($range);
-    }
-
-    /**
-     *
-     * @return \Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Slider\Range
-     */
-    private function getRange()
-    {
-        return $this->ranges[$this->getAttributeCode()];
-    }
-
-    /**
-     *
-     * @param \Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Slider\Range $range
-     */
-    private function setRange(\Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Slider\Range $range)
-    {
-        $this->ranges[$this->getAttributeCode()] = $range;
-        return $this;
     }
 
     /**
      *
      * @return array
      */
-    private function getRangeInterval()
+    protected function getRangeInterval()
     {
         $values = $this->rangeResolver
             ->setAttributeModel($this->getAttributeModel())
@@ -103,34 +72,6 @@ class HulmaalLaengde extends AbstractFilter
             'min' => floor(min($values)),
             'max' => ceil(max($values)),
         ];
-    }
-
-    /**
-     *
-     */
-    private function initRange($range)
-    {
-        if ($range->getCount() < 0) {
-            $rangeInterval = $this->getRangeInterval();
-            $range
-                ->setCount(0)
-                ->setMin($rangeInterval['min'])
-                ->setMax($rangeInterval['max']);
-        }
-
-        return $range;
-    }
-
-    /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     */
-    private function getCloneProductionCollection()
-    {
-        $attributeCode = $this->getAttributeCode();
-        $productCollection = clone $this->getLayer()->getProductCollection()
-            ->addAttributeToSelect($attributeCode);
-
-        return $productCollection;
     }
 
     /**
@@ -174,92 +115,6 @@ class HulmaalLaengde extends AbstractFilter
         );
 
         return $this;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function getFlagName()
-    {
-        return "swissup_aln_{$this->getAttributeCode()}_filter_applied";
-    }
-
-    /**
-     *
-     * @return array
-     */
-    protected function _getItemsData()
-    {
-        if ($this->getMaxPrice() - $this->getMinPrice() < 2) {
-            return [];
-        }
-
-        return parent::_getItemsData();
-    }
-
-    /**
-     *
-     * Fix for getPriceUrlTemplate() ->setRawAppliedOptions('');
-     *
-     * @return boolean
-     */
-    public function hasAppliedOption()
-    {
-        $raw = $this->getRawAppliedOptions();
-        return !empty($raw);
-    }
-
-    /**
-     *
-     * @return float
-     */
-    public function getMinPrice()
-    {
-        $price = $this->getRange()->getMin();
-        $price = $price > 0 ? $price : 0;
-
-        return floor((float) $price);
-    }
-
-    /**
-     *
-     * @return float
-     */
-    public function getMaxPrice()
-    {
-        $price = $this->getRange()->getMax();
-        return ceil((float) $price);
-    }
-
-    /**
-     *
-     * @return float
-     */
-    public function getFromMinPrice()
-    {
-        if ($this->hasAppliedOption() || $this->hasAppliedOptionInState()) {
-            $rangeInterval = $this->getRangeInterval();
-            $price = $rangeInterval['min'];
-            return floor((float) $price);
-        }
-
-        return $this->getMinPrice();
-    }
-
-    /**
-     *
-     * @return float
-     */
-    public function getToMaxPrice()
-    {
-        if ($this->hasAppliedOption() || $this->hasAppliedOptionInState()) {
-            $rangeInterval = $this->getRangeInterval();
-            $price = $rangeInterval['max'];
-            return ceil((float) $price);
-        }
-
-        return $this->getMaxPrice();
     }
 
     /**
