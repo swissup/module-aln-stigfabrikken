@@ -100,8 +100,8 @@ class HulmaalLaengde extends AbstractFilter
             ->resolve();
 
         return [
-            'min' => reset($values) - 1,
-            'max' => end($values) + 1,
+            'min' => floor(min($values)),
+            'max' => ceil(max($values)),
         ];
     }
 
