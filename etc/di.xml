@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <virtualType name="categoryFilterList" type="Swissup\Ajaxlayerednavigation\Model\Layer\FilterList">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="attribute" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Attribute</item>
+                <item name="price" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Price</item>
+                <item name="slider" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Slider</item>
+                <item name="hulmaal_bredde" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\HulmaalBredde</item>
+                <item name="hulmaal_laengde" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\HulmaalLaengde</item>
+                <item name="lofthoejde_max_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LofthoejdeMaxM</item>
+                <item name="uvaerdi" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\Uvaerdi</item>
+                <item name="decimal" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Decimal</item>
+                <item name="category" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Category</item>
+                <item name="quantity_and_stock_status" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Stock</item>
+                <item name="new" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\IsNew</item>
+                <item name="special_price" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\OnSale</item>
+                <item name="swissup_rating_summary" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Rating</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    
+    <virtualType name="searchFilterList" type="Swissup\Ajaxlayerednavigation\Model\Layer\FilterList">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="attribute" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Attribute</item>
+                <item name="price" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Price</item>
+                <item name="slider" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Slider</item>
+                <item name="hulmaal_bredde" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\HulmaalBredde</item>
+                <item name="hulmaal_laengde" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\HulmaalLaengde</item>
+                <item name="lofthoejde_max_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LofthoejdeMaxM</item>
+                <item name="uvaerdi" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\Uvaerdi</item>
+                <item name="decimal" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Decimal</item>
+                <item name="category" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Category</item>
+                <item name="quantity_and_stock_status" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Stock</item>
+                <item name="new" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\IsNew</item>
+                <item name="special_price" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\OnSale</item>
+                <item name="swissup_rating_summary" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Rating</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    
+</config>

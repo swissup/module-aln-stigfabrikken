@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+     <type name="Magento\LayeredNavigation\Block\Navigation\FilterRenderer">
+        <plugin name="custom_slider_attr_layered_renderer" type="Swissup\AlnStigfabrikken\Plugin\Block\Navigation\FilterRenderer\CustomSliderAttribute" sortOrder="800" />
+     </type>
+    
+<!--      <type name="Swissup\Ajaxlayerednavigation\Helper\Config">-->
+<!--        <plugin name="" type="Swissup\Ajaxlayerednavigation\Plugin\Helper\ConfigPlugin"/>-->
+<!--      </type>-->
+
+</config>
