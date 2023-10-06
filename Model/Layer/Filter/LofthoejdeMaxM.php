@@ -35,8 +35,6 @@ class LofthoejdeMaxM extends AbstractFilter
         \Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Slider\RangeFactory $rangeFactory,
         array $data = []
     ) {
-        $this->setRequestVar('lofthoejde_max_m');
-
         parent::__construct(
             $filterItemFactory,
             $storeManager,
@@ -48,6 +46,12 @@ class LofthoejdeMaxM extends AbstractFilter
             $rangeFactory,
             $data
         );
+    }
+    
+    protected function initRequestVar()
+    {
+        $this->setRequestVar('lofthoejde_max_m');
+//        $this->setRequestVar($this->getAttributeCode());
     }
 
     /**
