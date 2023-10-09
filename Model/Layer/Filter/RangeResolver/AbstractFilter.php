@@ -87,12 +87,9 @@ class AbstractFilter extends DefaultFilter
 
         $this->setRawAppliedOptions($filter);
 
-        $sfilter = explode('-', $filter);
-        $from = isset($sfilter[0]) ? (float) $sfilter[0] : $this->getMinPrice();
-        $to = isset($sfilter[1]) ? (float) $sfilter[1] : $this->getMaxPrice();
+        list($from, $to) = $this->splitRangeFilter($filter);
 
         $_collection = $this->getCloneProductionCollection();
-
         $collection = $this->getLayer()->getProductCollection();
 
         $flagName = $this->getFlagName();
