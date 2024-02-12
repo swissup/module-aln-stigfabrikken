@@ -77,8 +77,8 @@ class AbstractFilter extends DefaultFilter
             'min' => floor(min($values)),
             'max' => ceil(max($values)),
         ];
-    }
-
+    }    
+    
     /**
      *
      * @param \Magento\Framework\App\RequestInterface $request

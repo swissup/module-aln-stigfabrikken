@@ -79,16 +79,16 @@ class LofthoejdeMaxM extends AbstractFilter
         // $values = array_map('intval', $values);
         asort($values);
 
-        if (empty($values)) {
+        if (!empty($values)) {
             return [
-                'min' => 0,
-                'max' => 0,
+                'min' => floor(min($values)),
+                'max' => ceil(max($values)),
             ];
         }
 
         return [
-            'min' => floor(min($values)),
-            'max' => ceil(max($values)),
+            'min' => 0,
+            'max' => 0,
         ];
     }
 
