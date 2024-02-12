@@ -66,6 +66,13 @@ class AbstractFilter extends DefaultFilter
             ->setAttributeModel($this->getAttributeModel())
             ->resolve();
 
+        if (empty($values)) {
+            return [
+                'min' => 0,
+                'max' => 0,
+            ];
+        }
+
         return [
             'min' => floor(min($values)),
             'max' => ceil(max($values)),

@@ -64,6 +64,7 @@ class LofthoejdeMaxM extends AbstractFilter
         $productCollection = $this->getCloneProductionCollection();
 
         $optionIds = $productCollection->getColumnValues($attributeCode);
+        unset($productCollection);
         $optionIds = array_filter($optionIds);
         $optionIds = array_unique($optionIds);
 
@@ -78,7 +79,12 @@ class LofthoejdeMaxM extends AbstractFilter
         // $values = array_map('intval', $values);
         asort($values);
 
-        unset($productCollection);
+        if (empty($values)) {
+            return [
+                'min' => 0,
+                'max' => 0,
+            ];
+        }
 
         return [
             'min' => floor(min($values)),
