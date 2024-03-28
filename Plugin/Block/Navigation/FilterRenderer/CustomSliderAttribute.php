@@ -49,6 +49,8 @@ class CustomSliderAttribute
                 'hulmaal_bredde',
                 'hulmaal_laengde',
                 'uvaerdi',
+                'laengde_m',
+                'lodret_hoejde_m',
             ];
 
             if (in_array($attributeModel->getAttributeCode(), $customAttributeCodes)) {
