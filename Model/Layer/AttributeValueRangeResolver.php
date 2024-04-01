@@ -69,17 +69,12 @@ class AttributeValueRangeResolver
         $attributeId = $this->attributeModel->getAttributeId();
         $layerProductCollection = $this->getCloneProductionCollection()
             ->addAttributeToSelect($attributeCode);
-
-        $values = $layerProductCollection->getColumnValues($attributeCode);
-
+        $columnValues = $layerProductCollection->getColumnValues($attributeCode);
         $parentIds = $layerProductCollection->getAllIds();
         $variationIds = $this->getVariationIds($parentIds);
         $variationValues = $this->getVariationValues($variationIds);
-
-        $values = array_unique(array_merge($values, $variationValues));
-        $values = array_filter($values);
-        $values = array_map('floatval', $values);
-        asort($values);
+        $rawValues = array_merge($columnValues, $variationValues);
+        $values = $this->convertValues($rawValues);
         return $values;
         // foreach($layerProductCollection->getItems() as $item) {
         //     if($item->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
@@ -135,5 +130,32 @@ class AttributeValueRangeResolver
         ;
 
         return $collection->getColumnValues($attributeCode);
+    }
+
+    /**
+     * @param $rawValues
+     * @return array
+     */
+    private function convertValues($rawValues): array
+    {
+        $rawValues = array_unique($rawValues);
+        $values = [];
+        foreach ($rawValues as $value) {
+            if (is_string($value) && strstr($value, '-')) {
+                $value = str_replace(',', '.', $value);
+                list($start, $end) = explode('-', $value, 2);
+                $rangeValues = range($start, $end, 0.01);
+                $rangeValues = array_map(function ($v) {
+                    return round($v, 2);
+                }, $rangeValues);
+                $values = array_merge($values, $rangeValues);
+            } else {
+                $values[] = (float) $value;
+            }
+        }
+        $values = array_unique($values);
+        $values = array_filter($values);
+        asort($values);
+        return $values;
     }
 }
