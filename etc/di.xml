@@ -12,6 +12,7 @@
                 <item name="lofthoejde_max_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LofthoejdeMaxM</item>
                 <item name="uvaerdi" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\Uvaerdi</item>
                 <item name="laengde_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LaengdeM</item>
+                <item name="lodret_hoejde_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LodretHoejdeM</item>
                 <item name="decimal" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Decimal</item>
                 <item name="category" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Category</item>
                 <item name="quantity_and_stock_status" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Stock</item>
@@ -33,6 +34,7 @@
                 <item name="lofthoejde_max_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LofthoejdeMaxM</item>
                 <item name="uvaerdi" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\Uvaerdi</item>
                 <item name="laengde_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LaengdeM</item>
+                <item name="lodret_hoejde_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LodretHoejdeM</item>
                 <item name="decimal" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Decimal</item>
                 <item name="category" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Category</item>
                 <item name="quantity_and_stock_status" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Stock</item>
