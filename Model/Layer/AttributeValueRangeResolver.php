@@ -26,10 +26,15 @@ class AttributeValueRangeResolver
      */
     private $storeManager;
     
-
     private $attributeModel;
 
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
+     */
     private $clonedProductCollection;
+
+    private $options = [];
+
     /**
      *
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
@@ -62,46 +67,60 @@ class AttributeValueRangeResolver
         }
         return $this->clonedProductCollection;
     }
+
+    private function getInputType()
+    {
+        return $this->attributeModel->getFrontend()->getInputType();
+    }
+
+    private function getAttributeCode()
+    {
+        return $this->attributeModel->getAttributeCode();
+    }
     
     public function resolve() 
     {
-        $attributeCode = $this->attributeModel->getAttributeCode();
-        $attributeId = $this->attributeModel->getAttributeId();
+        $attributeCode = $this->getAttributeCode();
+        // $attributeId = $this->attributeModel->getAttributeId();
         $layerProductCollection = $this->getCloneProductionCollection()
             ->addAttributeToSelect($attributeCode);
-        $columnValues = $layerProductCollection->getColumnValues($attributeCode);
         $parentIds = $layerProductCollection->getAllIds();
         $variationIds = $this->getVariationIds($parentIds);
         $variationValues = $this->getVariationValues($variationIds);
-        $rawValues = array_merge($columnValues, $variationValues);
-        $values = $this->convertValues($rawValues);
+
+        $inputType = $this->getInputType();
+        if ($inputType === 'text') {
+            $columnValues = $layerProductCollection->getColumnValues($attributeCode);
+            $rawValues = array_merge($columnValues, $variationValues);
+        } else { //$inputType === 'select'
+            $rawValues = $variationValues;
+        }
+
+        $this->options = $this->buildOptions($rawValues);
+
+        $values = [];
+        foreach($this->options as $range) {
+            $values = array_merge($values, array_values($range));
+        }
+        $values = array_unique($values);
+        // $values = array_filter($values);
+        $values = array_filter($values, function($value) {
+            return ($value !== null && $value !== false && $value !== '');
+        });
+        asort($values);
+
         return $values;
-        // foreach($layerProductCollection->getItems() as $item) {
-        //     if($item->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
-        //         $productTypeInstance = $item->getTypeInstance();
-        //         $usedProducts = $productTypeInstance->getUsedProducts($item, [$attributeId]);
 
-        //         foreach($usedProducts as $usedProduct) {
-        //             $values[] = $usedProduct->getData($attributeCode);
-        //         }
-        //         // var_dump([$item->getId(), count($usedProducts)]);
-        //         // die;
-        //     }
-        // }
+    }
 
-        // $values = array_map('floatval', $values);
-        // // $values = array_filter($values);
-        // $values = array_unique($values);
-        // asort($values);
-
-        // unset($layerProductCollection);
-        
-        return $values;
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     private function getVariationIds($parentIds)
     {
-        $attributeCode = $this->attributeModel->getAttributeCode();
+        $attributeCode = $this->getAttributeCode();
         $collection = $this->configurableProductCollectionFactory->create()
             ->setFlag(
                 'product_children',
@@ -122,40 +141,61 @@ class AttributeValueRangeResolver
 
     private function getVariationValues($ids)
     {
-        $attributeCode = $this->attributeModel->getAttributeCode();
+        $attributeCode = $this->getAttributeCode();
 
         $collection = $this->productCollectionFactory->create()
             ->addIdFilter($ids)
             ->addAttributeToSelect($attributeCode)
         ;
 
-        return $collection->getColumnValues($attributeCode);
+        $columnValues = $collection->getColumnValues($attributeCode);
+
+        $attributeModelFrontend = $this->attributeModel->getFrontend();
+        $inputType = $this->getInputType();
+
+        $values = [];
+        if ($inputType === 'text') {
+            $values = $columnValues;
+        } elseif ($inputType === 'select') {
+            $values = [];
+            $optionIds = $columnValues;
+            $optionIds = array_unique($optionIds);
+            foreach($optionIds as $optionId) {
+                $values[$optionId] = $attributeModelFrontend->getOption($optionId);
+            }
+        }
+        return $values;
     }
 
     /**
      * @param $rawValues
      * @return array
      */
-    private function convertValues($rawValues): array
+    private function buildOptions($rawValues): array
     {
         $rawValues = array_unique($rawValues);
-        $values = [];
-        foreach ($rawValues as $value) {
+        $rawValues = array_filter($rawValues, function($value) {
+            return ($value !== null && $value !== false && $value !== '');
+        });
+        $options = [];
+        foreach ($rawValues as $optionId => $value) {
             if (is_string($value) && strstr($value, '-')) {
                 $value = str_replace(',', '.', $value);
                 list($start, $end) = explode('-', $value, 2);
-                $rangeValues = range($start, $end, 0.01);
-                $rangeValues = array_map(function ($v) {
-                    return round($v, 2);
-                }, $rangeValues);
-                $values = array_merge($values, $rangeValues);
+                $options[$optionId] = [
+                    /*'start' =>*/ (float) $start,
+                    /*'end' => */(float) $end,
+                ];
             } else {
-                $values[] = (float) $value;
+                // $options[$optionId] = (float) $value;
+                $options[$optionId] = [
+                    /*'start' => (float) $value,
+                    'end' => */(float) $value,
+                ];;
             }
         }
-        $values = array_unique($values);
-        $values = array_filter($values);
-        asort($values);
-        return $values;
+        ksort($options);
+
+        return $options;
     }
 }

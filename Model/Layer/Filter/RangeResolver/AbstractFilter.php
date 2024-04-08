@@ -18,6 +18,12 @@ class AbstractFilter extends DefaultFilter
 
     /**
      *
+     * @var array
+     */
+    private $options;
+
+    /**
+     *
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
      * @param StoreManagerInterface  $storeManager
      * @param Layer                  $layer
@@ -66,6 +72,8 @@ class AbstractFilter extends DefaultFilter
             ->setAttributeModel($this->getAttributeModel())
             ->resolve();
 
+        $this->options = $this->rangeResolver->getOptions();
+
         if (empty($values)) {
             return [
                 'min' => 0,
@@ -103,9 +111,33 @@ class AbstractFilter extends DefaultFilter
         $collection->setFlag($flagName, true);
 
         $attributeCode = $this->getAttributeCode();
+        $inputType = $this->getAttributeModel()->getFrontend()->getInputType();
 
-        $_collection->addFieldToFilter($attributeCode, ['from' => $from, 'to' => $to]);
-        $entityIds = $_collection->getSize() ? $_collection->getAllIds() : [];
+        if ($inputType === 'select') {
+            $attributeFilter = [];
+
+            if ($this->options === null) {
+                $this->getRangeInterval();
+            }
+            foreach ($this->options as $optionId => $optionValue) {
+                $value = is_array($optionValue) ? $optionValue : [$optionValue];
+
+                $start = min($value);
+                $end = max($value);
+
+                if ($from <= $start && $end <= $to) {
+                    $attributeFilter[] = $optionId;
+                }
+            }
+            $entityIds = [];
+            if (!empty($attributeFilter))  {
+                $_collection->addFieldToFilter($attributeCode, $attributeFilter);
+                $entityIds = $_collection->getAllIds();
+            }
+        } else {
+            $_collection->addFieldToFilter($attributeCode, ['from' => $from, 'to' => $to]);
+            $entityIds = $_collection->getSize() ? $_collection->getAllIds() : [];
+        }
 
         $collection->getSelect()->where('e.entity_id IN (?)', $entityIds);
 

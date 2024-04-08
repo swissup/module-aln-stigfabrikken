@@ -21,4 +21,9 @@ class LodretHoejdeM extends AbstractFilter
     {
         return __('%1 - %2 (m)', $from, $to);
     }
+
+    public function getStep()
+    {
+        return 0.1;
+    }
 }

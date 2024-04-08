@@ -7,7 +7,7 @@ class LaengdeM extends AbstractFilter
 {   
     protected function initRequestVar()
     {
-        $this->setRequestVar('laengde_m');
+            $this->setRequestVar('laengde_m');
 //        $this->setRequestVar($this->getAttributeCode());
     }
 
@@ -20,5 +20,10 @@ class LaengdeM extends AbstractFilter
     protected function _renderLabel($from, $to)
     {
         return __('%1 - %2 (m)', $from, $to);
+    }
+
+    public function getStep()
+    {
+        return 0.1;
     }
 }
