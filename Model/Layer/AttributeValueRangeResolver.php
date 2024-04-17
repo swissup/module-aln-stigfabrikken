@@ -168,7 +168,9 @@ class AttributeValueRangeResolver
         });
         $options = [];
         foreach ($rawValues as $optionId => $value) {
-            $value = str_replace(',', '.', $value);
+            if (is_string($value)) {
+                $value = str_replace(',', '.', $value);
+            }
             if (is_string($value) && strstr($value, '-')) {
                 list($start, $end) = explode('-', $value, 2);
                 $options[$optionId] = [
