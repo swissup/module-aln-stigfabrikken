@@ -28,11 +28,6 @@ class AttributeValueRangeResolver
     
     private $attributeModel;
 
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
-     */
-    private $clonedProductCollection;
-
     private $options = [];
 
     /**
@@ -57,17 +52,6 @@ class AttributeValueRangeResolver
         return $this;
     }
 
-    /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     */
-    private function getCloneProductionCollection()
-    {
-        if ($this->clonedProductCollection === null) {
-            $this->clonedProductCollection = clone $this->layer->getProductCollection();
-        }
-        return $this->clonedProductCollection;
-    }
-
     private function getInputType()
     {
         return $this->attributeModel->getFrontend()->getInputType();
@@ -82,8 +66,13 @@ class AttributeValueRangeResolver
     {
         $attributeCode = $this->getAttributeCode();
         // $attributeId = $this->attributeModel->getAttributeId();
-        $layerProductCollection = $this->getCloneProductionCollection()
-            ->addAttributeToSelect($attributeCode);
+        $layerProductCollection = clone $this->layer->getProductCollection();
+        // $layerProductCollection = $this->getProductCollectionResolver()->resolve();
+        $layerProductCollection = $layerProductCollection->addAttributeToSelect($attributeCode);
+
+        $layerProductCollection->clear();
+        $layerProductCollection->loadWithFilter();
+
         $parentIds = $layerProductCollection->getAllIds();
         $variationIds = $this->getVariationIds($parentIds);
         $variationValues = $this->getVariationValues($variationIds);
@@ -179,8 +168,8 @@ class AttributeValueRangeResolver
         });
         $options = [];
         foreach ($rawValues as $optionId => $value) {
+            $value = str_replace(',', '.', $value);
             if (is_string($value) && strstr($value, '-')) {
-                $value = str_replace(',', '.', $value);
                 list($start, $end) = explode('-', $value, 2);
                 $options[$optionId] = [
                     /*'start' =>*/ (float) $start,
