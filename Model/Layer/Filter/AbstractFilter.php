@@ -140,10 +140,6 @@ class AbstractFilter extends DefaultSlider
         $productCollection = clone $this->getLayer()->getProductCollection()
             ->addAttributeToSelect($attributeCode);
 
-        if ($productCollection->isLoaded()) {
-            $productCollection->clear();
-        }
-
         return $productCollection;
     }
     

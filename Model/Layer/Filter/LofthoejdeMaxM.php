@@ -119,8 +119,18 @@ class LofthoejdeMaxM extends AbstractFilter
 
         $attributeFilter = [];
         foreach ($this->options as $optionId => $optionValue) {
+            if (is_string($optionValue)) {
+                $optionValue = str_replace(',', '.', $optionValue);
+            }
+            if (is_string($optionValue) && strstr($optionValue, '-')) {
+                list($start, $end) = explode('-', $optionValue, 2);
+            } else {
+                $start = $end = $optionValue;
+            }
+            $start = (float) $start;
+            $end = (float) $end;
 
-            if ($from <= $optionValue && $optionValue <= $to) {
+            if ($from <= $start && $end <= $to) {
                 $attributeFilter[] = $optionId;
             }
         }

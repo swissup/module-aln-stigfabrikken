@@ -1,9 +1,9 @@
 <?php
 namespace Swissup\AlnStigfabrikken\Model\Layer\Filter;
 
-use Swissup\AlnStigfabrikken\Model\Layer\Filter\RangeResolver\AbstractFilter;
+use Swissup\AlnStigfabrikken\Model\Layer\Filter\AbstractRangeFilter;
 
-class LaengdeM extends AbstractFilter
+class LaengdeM extends AbstractRangeFilter
 {   
     protected function initRequestVar()
     {

@@ -1,5 +1,5 @@
 <?php
-namespace Swissup\AlnStigfabrikken\Model\Layer\Filter\RangeResolver;
+namespace Swissup\AlnStigfabrikken\Model\Layer\Filter;
 
 use Swissup\AlnStigfabrikken\Model\Layer\Filter\AbstractFilter as DefaultFilter;
 use Swissup\Ajaxlayerednavigation\Model\Layer\Filter\ItemFactory;
@@ -8,7 +8,7 @@ use Magento\Catalog\Model\Layer;
 use Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Item\Builder;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
-class AbstractFilter extends DefaultFilter
+class AbstractRangeFilter extends DefaultFilter
 {
     /**
      *
@@ -80,12 +80,13 @@ class AbstractFilter extends DefaultFilter
                 'max' => 0,
             ];
         }
+        $this->setData('step', 0.1);
 
         return [
             'min' => floor(min($values)),
             'max' => ceil(max($values)),
         ];
-    }    
+    }
     
     /**
      *
@@ -104,10 +105,12 @@ class AbstractFilter extends DefaultFilter
 
         list($from, $to) = $this->splitRangeFilter($filter);
 
-        $_collection = $this->getCloneProductionCollection();
         $collection = $this->getLayer()->getProductCollection();
 
         $flagName = $this->getFlagName();
+        if ($collection->hasFlag($flagName)) {
+            return $this;
+        }
         $collection->setFlag($flagName, true);
 
         $attributeCode = $this->getAttributeCode();
@@ -119,6 +122,7 @@ class AbstractFilter extends DefaultFilter
             if ($this->options === null) {
                 $this->getRangeInterval();
             }
+
             foreach ($this->options as $optionId => $optionValue) {
                 $value = is_array($optionValue) ? $optionValue : [$optionValue];
 
@@ -129,17 +133,17 @@ class AbstractFilter extends DefaultFilter
                     $attributeFilter[] = $optionId;
                 }
             }
-            $entityIds = [];
-            if (!empty($attributeFilter))  {
-                $_collection->addFieldToFilter($attributeCode, $attributeFilter);
-                $entityIds = $_collection->getAllIds();
-            }
+            $collection->addFieldToFilter($attributeCode, $attributeFilter);
         } else {
-            $_collection->addFieldToFilter($attributeCode, ['from' => $from, 'to' => $to]);
-            $entityIds = $_collection->getSize() ? $_collection->getAllIds() : [];
+            $_collection = $this->getCloneProductionCollection();
+            $_collection->addAttributeToFilter($attributeCode, ['from' => $from, 'to' => $to]);
+            $entityIds = count($_collection)/*->getSize()*/ ? $_collection->getAllIds() : [];
+            $collection->getSelect()->where('e.entity_id IN (?)', $entityIds);
         }
 
-        $collection->getSelect()->where('e.entity_id IN (?)', $entityIds);
+        // $collection->addIdFilter($entityIds);
+        // $collection->addFieldToFilter('entity_id', $entityIds);
+        // $collection->getSelect()->where('e.entity_id IN (?)', $entityIds);
 
         $this->getState()->addFilter(
             $this->_createItem(

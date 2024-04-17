@@ -1,14 +1,9 @@
 <?php
 namespace Swissup\AlnStigfabrikken\Model\Layer\Filter;
 
-use Swissup\AlnStigfabrikken\Model\Layer\Filter\RangeResolver\AbstractFilter;
-use Swissup\Ajaxlayerednavigation\Model\Layer\Filter\ItemFactory;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Model\Layer;
-use Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Item\Builder;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Swissup\AlnStigfabrikken\Model\Layer\Filter\AbstractRangeFilter;
 
-class Uvaerdi extends AbstractFilter
+class Uvaerdi extends AbstractRangeFilter
 {   
     protected function initRequestVar()
     {
