@@ -74,8 +74,10 @@ class AttributeValueRangeResolver
         $layerProductCollection->loadWithFilter();
 
         $parentIds = $layerProductCollection->getAllIds();
+        $variationValues0 = $this->getVariationValues($parentIds);
         $variationIds = $this->getVariationIds($parentIds);
         $variationValues = $this->getVariationValues($variationIds);
+        $variationValues = array_merge($variationValues0, $variationValues);
 
         $inputType = $this->getInputType();
         if ($inputType === 'text') {
@@ -84,7 +86,6 @@ class AttributeValueRangeResolver
         } else { //$inputType === 'select'
             $rawValues = $variationValues;
         }
-
         $this->options = $this->buildOptions($rawValues);
 
         $values = [];
