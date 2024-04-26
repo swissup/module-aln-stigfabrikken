@@ -133,7 +133,12 @@ class AbstractRangeFilter extends DefaultFilter
                     $attributeFilter[] = $optionId;
                 }
             }
-            $collection->addFieldToFilter($attributeCode, $attributeFilter);
+            if (!empty($attributeFilter)) {
+                $collection->addFieldToFilter($attributeCode, $attributeFilter);
+            } else {
+                // nothing found
+                $collection->addFieldToFilter($attributeCode, [null]);
+            }
         } else {
             $_collection = $this->getCloneProductionCollection();
             $_collection->addAttributeToFilter($attributeCode, ['from' => $from, 'to' => $to]);
