@@ -74,17 +74,18 @@ class AttributeValueRangeResolver
         $layerProductCollection->loadWithFilter();
 
         $parentIds = $layerProductCollection->getAllIds();
-        $variationValues0 = $this->getVariationValues($parentIds);
+        $variationOptions0 = $this->getVariationValues($parentIds);
         $variationIds = $this->getVariationIds($parentIds);
-        $variationValues = $this->getVariationValues($variationIds);
-        $variationValues = array_merge($variationValues0, $variationValues);
+        $variationOptions = $this->getVariationValues($variationIds);
 
         $inputType = $this->getInputType();
         if ($inputType === 'text') {
             $columnValues = $layerProductCollection->getColumnValues($attributeCode);
-            $rawValues = array_merge($columnValues, $variationValues);
+            $variationOptions = array_merge($variationOptions, $variationOptions0);
+            $rawValues = array_merge($columnValues, $variationOptions);
         } else { //$inputType === 'select'
-            $rawValues = $variationValues;
+            $variationOptions = array_replace_recursive($variationOptions, $variationOptions0);
+            $rawValues = $variationOptions;
         }
         $this->options = $this->buildOptions($rawValues);
 
