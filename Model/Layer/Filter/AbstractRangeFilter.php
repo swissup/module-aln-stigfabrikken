@@ -123,16 +123,21 @@ class AbstractRangeFilter extends DefaultFilter
                 $this->getRangeInterval();
             }
 
+            $step = $this->getStep();//getData('step');
+            $filterRange = range($from, $to, $step);
             foreach ($this->options as $optionId => $optionValue) {
                 $value = is_array($optionValue) ? $optionValue : [$optionValue];
 
                 $start = min($value);
                 $end = max($value);
 
-                if ($from <= $start && $end <= $to) {
+                $optionRange = range($start, $end, $step);
+                // if ($from <= $start && $end <= $to) {
+                if (count(array_intersect($filterRange, $optionRange)) > 0) {
                     $attributeFilter[] = $optionId;
                 }
             }
+
             if (!empty($attributeFilter)) {
                 $collection->addFieldToFilter($attributeCode, $attributeFilter);
             } else {
