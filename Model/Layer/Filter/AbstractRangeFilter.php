@@ -123,7 +123,7 @@ class AbstractRangeFilter extends DefaultFilter
                 $this->getRangeInterval();
             }
 
-            $step = $this->getStep();//getData('step');
+            $step = 0.001;//$this->getStep();//getData('step');
             $filterRange = range($from, $to, $step);
             foreach ($this->options as $optionId => $optionValue) {
                 $value = is_array($optionValue) ? $optionValue : [$optionValue];
