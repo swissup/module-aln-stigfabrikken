@@ -52,6 +52,7 @@ class CustomSliderAttribute
                 'laengde_m',
                 'lodret_hoejde_m',
                 'platformshoejde_m',
+                'lofthojde_interval_m',
             ];
 
             if (in_array($attributeModel->getAttributeCode(), $customAttributeCodes)) {

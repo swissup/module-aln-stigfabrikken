@@ -14,6 +14,7 @@
                 <item name="laengde_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LaengdeM</item>
                 <item name="lodret_hoejde_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LodretHoejdeM</item>
                 <item name="platformshoejde_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\PlatformshoejdeM</item>
+                <item name="lofthojde_interval_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LoftHojdeInternalM</item>
                 <item name="decimal" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Decimal</item>
                 <item name="category" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Category</item>
                 <item name="quantity_and_stock_status" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Stock</item>
@@ -23,7 +24,7 @@
             </argument>
         </arguments>
     </virtualType>
-    
+
     <virtualType name="searchFilterList" type="Swissup\Ajaxlayerednavigation\Model\Layer\FilterList">
         <arguments>
             <argument name="filters" xsi:type="array">
@@ -37,6 +38,7 @@
                 <item name="laengde_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LaengdeM</item>
                 <item name="lodret_hoejde_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LodretHoejdeM</item>
                 <item name="platformshoejde_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\PlatformshoejdeM</item>
+                <item name="lofthojde_interval_m" xsi:type="string">Swissup\AlnStigfabrikken\Model\Layer\Filter\LoftHojdeInternalM</item>
                 <item name="decimal" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Decimal</item>
                 <item name="category" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Category</item>
                 <item name="quantity_and_stock_status" xsi:type="string">Swissup\Ajaxlayerednavigation\Model\Layer\Filter\Stock</item>
@@ -46,5 +48,5 @@
             </argument>
         </arguments>
     </virtualType>
-    
+
 </config>
