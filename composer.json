@@ -8,11 +8,11 @@
         "seo layered navigation"
     ],
     "type": "magento2-module",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "license": ["OSL-3.0"],
     "require": {
-        "swissup/module-core": "^1.12.19",
-        "swissup/module-ajaxlayerednavigation": "^1.5.11"
+        "swissup/module-core": "^1.12.20",
+        "swissup/module-ajaxlayerednavigation": "^1.5.24"
     },
     "autoload": {
         "files": [ "registration.php" ],
