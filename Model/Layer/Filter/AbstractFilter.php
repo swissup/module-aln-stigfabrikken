@@ -112,24 +112,24 @@ class AbstractFilter extends DefaultSlider
     protected function splitRangeFilter($filter) 
     {
         $sfilter = explode('-', $filter);
-        $from = isset($sfilter[0]) ? (float) $sfilter[0] : $this->getMinPrice();
-        $to = isset($sfilter[1]) ? (float) $sfilter[1] : $this->getMaxPrice();
-        if ($from > $to) {
-            $t = $from;
-            $from = $to;
-            $to = $t;
-        }
-        if ($from < $this->getMinPrice()) {
-            $from = $this->getMinPrice();
-        }
-        if ($to > $this->getMaxPrice()) {
-            $to = $this->getMaxPrice();
-        }
+        $min = $this->getMinPrice();
+        $max = $this->getMaxPrice();
+        $from = isset($sfilter[0]) ? (float) $sfilter[0] : $min;
+        $to = isset($sfilter[1]) ? (float) $sfilter[1] : $max;
+
+        // Ensure from is not greater than to
+        list($from, $to) = [min($from, $to), max($from, $to)];
+
+        // Clamp values to min/max
+        $from = max($from, $min);
+        $to = min($to, $max);
+
+        // Avoid zero-width range
         if ($from == $to) {
-            if ($to < $this->getMaxPrice()) {
-                $to = $to + 1;
+            if ($to < $max) {
+                $to++;
             } else {
-                $from = $from - 1;
+                $from--;
             }
         }
         return [$from, $to];
