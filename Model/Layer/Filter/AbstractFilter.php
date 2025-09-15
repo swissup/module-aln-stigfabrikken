@@ -114,7 +114,24 @@ class AbstractFilter extends DefaultSlider
         $sfilter = explode('-', $filter);
         $from = isset($sfilter[0]) ? (float) $sfilter[0] : $this->getMinPrice();
         $to = isset($sfilter[1]) ? (float) $sfilter[1] : $this->getMaxPrice();
-        
+        if ($from > $to) {
+            $t = $from;
+            $from = $to;
+            $to = $t;
+        }
+        if ($from < $this->getMinPrice()) {
+            $from = $this->getMinPrice();
+        }
+        if ($to > $this->getMaxPrice()) {
+            $to = $this->getMaxPrice();
+        }
+        if ($from == $to) {
+            if ($to < $this->getMaxPrice()) {
+                $to = $to + 1;
+            } else {
+                $from = $from - 1;
+            }
+        }
         return [$from, $to];
     } 
     
